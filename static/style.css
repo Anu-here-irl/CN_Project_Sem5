@@ -1,0 +1,520 @@
+:root {
+    --bg-main: #0f172a;
+    --bg-card: #1e293b;
+    --bg-card-hover: #334155;
+    --border-color: #334155;
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --accent: #6366f1;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.85rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+}
+
+.brand span.badge {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--text-primary);
+    background-color: var(--bg-card-hover);
+}
+
+.user-tag {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: #0f172a;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.btn-logout {
+    color: #fca5a5 !important;
+}
+.btn-logout:hover {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Flash Messages */
+.flash-container {
+    max-width: 960px;
+    margin: 1.5rem auto 0;
+    padding: 0 1rem;
+    width: 100%;
+}
+
+.alert {
+    padding: 0.85rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.alert-success { background-color: rgba(16, 185, 129, 0.15); border: 1px solid #059669; color: #6ee7b7; }
+.alert-danger { background-color: rgba(239, 68, 68, 0.15); border: 1px solid #dc2626; color: #fca5a5; }
+.alert-warning { background-color: rgba(245, 158, 11, 0.15); border: 1px solid #d97706; color: #fcd34d; }
+.alert-info { background-color: rgba(59, 130, 246, 0.15); border: 1px solid #2563eb; color: #93c5fd; }
+
+/* Main App Layout */
+.app-container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    width: 100%;
+    flex: 1;
+}
+
+.mail-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 1.5rem;
+    min-height: 520px;
+}
+
+/* Sidebar */
+.mail-sidebar {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.btn-compose {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    transition: opacity 0.2s ease;
+}
+
+.btn-compose:hover {
+    opacity: 0.9;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.sidebar-nav a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.65rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.sidebar-nav a:hover, .sidebar-nav a.active {
+    background-color: var(--bg-card-hover);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Mail Content Area */
+.mail-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.mail-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mail-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Placeholder card */
+.placeholder-box {
+    border: 2px dashed var(--border-color);
+    border-radius: 10px;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background: rgba(15, 23, 42, 0.4);
+}
+
+.placeholder-box h3 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.placeholder-box p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.status-badge {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    font-family: monospace;
+    background: #0f172a;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    color: #38bdf8;
+}
+
+/* Auth Cards */
+.auth-wrapper {
+    max-width: 420px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.auth-wrapper h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.auth-wrapper p.subtitle {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    background-color: #0f172a;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.92rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 0.8rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+    opacity: 0.92;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Compose Form Styling */
+.compose-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.compose-form label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.compose-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.btn-send {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-send:hover {
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.92rem;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-card-hover);
+    color: var(--text-primary);
+}
+
+/* Email List & Table */
+.email-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.email-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.email-row {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.15s ease;
+    cursor: pointer;
+}
+
+.email-row:hover {
+    background-color: rgba(51, 65, 85, 0.4);
+}
+
+.email-row td {
+    padding: 0.9rem 1rem;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.email-recipient, .email-sender {
+    font-weight: 600;
+    color: var(--text-primary);
+    width: 20%;
+}
+
+.email-subject {
+    color: var(--text-primary);
+    width: 45%;
+}
+
+.email-preview {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: normal;
+    margin-left: 0.5rem;
+}
+
+.email-date {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-align: right;
+    white-space: nowrap;
+    width: 20%;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}
+
+.empty-state p {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Category Badge Styling */
+.category-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.badge-work { background-color: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid #3b82f6; }
+.badge-personal { background-color: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid #10b981; }
+.badge-promotion { background-color: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid #f59e0b; }
+.badge-spam { background-color: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; }
+.badge-unclassified { background-color: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid #64748b; }
+
+/* Inbox Toolbar & Indicators */
+.inbox-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.btn-fetch {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+    border: 1px solid #3b82f6;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.btn-fetch:hover {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.unread-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.email-row.unread {
+    background-color: rgba(59, 130, 246, 0.06);
+}
+
+.email-row.unread .email-sender,
+.email-row.unread .email-subject {
+    color: #ffffff;
+    font-weight: 700;
+}
+

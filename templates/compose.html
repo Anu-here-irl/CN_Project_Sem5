@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Compose Email - Local Mail System{% endblock %}
+
+{% block content %}
+<div class="mail-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="mail-sidebar">
+        <a href="{{ url_for('compose') }}" class="btn-compose">✏️ Compose</a>
+        <div class="sidebar-nav">
+            <a href="{{ url_for('inbox') }}">📥 Inbox</a>
+            <a href="{{ url_for('sent') }}">📤 Sent</a>
+        </div>
+    </aside>
+
+    <!-- Compose Form -->
+    <section class="mail-content">
+        <div class="mail-header">
+            <h2>New Message</h2>
+            <span class="user-tag">From: {{ session.get('username') }}</span>
+        </div>
+
+        <form method="POST" action="{{ url_for('compose') }}" class="compose-form">
+            <div class="form-group">
+                <label for="recipient">To (Recipient Username or Email)</label>
+                <input 
+                    type="text" 
+                    id="recipient" 
+                    name="recipient" 
+                    class="form-control" 
+                    placeholder="e.g. bob or bob@localmail.com"
+                    required 
+                    autofocus
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input 
+                    type="text" 
+                    id="subject" 
+                    name="subject" 
+                    class="form-control" 
+                    placeholder="Enter email subject..."
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="body">Message Body</label>
+                <textarea 
+                    id="body" 
+                    name="body" 
+                    class="form-control" 
+                    rows="9" 
+                    placeholder="Write your email content here..." 
+                    required
+                ></textarea>
+            </div>
+
+            <div class="compose-actions">
+                <button type="submit" class="btn-send">📤 Send Email</button>
+                <a href="{{ url_for('inbox') }}" class="btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

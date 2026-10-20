@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Inbox - Local Mail System{% endblock %}
+
+{% block content %}
+<div class="mail-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="mail-sidebar">
+        <a href="{{ url_for('compose') }}" class="btn-compose">✏️ Compose</a>
+        <div class="sidebar-nav">
+            <a href="{{ url_for('inbox') }}" class="active">
+                <span>📥 Inbox</span>
+                {% set unread_count = emails | selectattr('is_read', 'equalto', 0) | list | length %}
+                {% if unread_count > 0 %}
+                    <span style="background: #3b82f6; color: white; padding: 0.15rem 0.45rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 700;">{{ unread_count }}</span>
+                {% endif %}
+            </a>
+            <a href="{{ url_for('sent') }}">📤 Sent</a>
+        </div>
+    </aside>
+
+    <!-- Inbox Messages Section -->
+    <section class="mail-content">
+        <div class="mail-header">
+            <div>
+                <h2>Inbox</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">
+                    Local mailbox for <strong>{{ session.get('username') }}</strong>
+                </p>
+            </div>
+            
+            <form method="POST" action="{{ url_for('fetch_mail_route') }}" style="margin: 0;">
+                <button type="submit" class="btn-fetch" title="Poll POP3 server for new messages">
+                    <span>🔄</span> Check Mail (POP3)
+                </button>
+            </form>
+        </div>
+
+        {% if emails and emails|length > 0 %}
+            <table class="email-table">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">From</th>
+                        <th style="width: 15%;">Category</th>
+                        <th style="width: 40%;">Subject & Preview</th>
+                        <th style="width: 20%; text-align: right;">Received</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email in emails %}
+                        <tr 
+                            class="email-row {{ 'unread' if email.is_read == 0 else '' }}" 
+                            id="row-{{ email.id }}"
+                            onclick="openEmail('{{ email.id }}')"
+                        >
+                            <td class="email-sender">
+                                {% if email.is_read == 0 %}
+                                    <span class="unread-indicator" id="dot-{{ email.id }}"></span>
+                                {% endif %}
+                                {{ email.sender }}
+                            </td>
+                            <td>
+                                <span class="category-badge badge-{{ email.category|lower }}">
+                                    {{ email.category }}
+                                </span>
+                            </td>
+                            <td class="email-subject">
+                                <span>{{ email.subject or '(No Subject)' }}</span>
+                                <span class="email-preview">— {{ email.body[:50] }}{% if email.body|length > 50 %}...{% endif %}</span>
+                            </td>
+                            <td class="email-date">{{ email.timestamp }}</td>
+                        </tr>
+                        <!-- Collapsible Email Body Row -->
+                        <tr id="email-detail-{{ email.id }}" style="display: none; background: rgba(15, 23, 42, 0.65);">
+                            <td colspan="4" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.85rem; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.6rem;">
+                                    <div>
+                                        <strong>From:</strong> {{ email.sender }} &nbsp;|&nbsp; 
+                                        <strong>To:</strong> {{ email.recipient }}
+                                    </div>
+                                    <div>
+                                        <strong>Received:</strong> {{ email.timestamp }}
+                                    </div>
+                                </div>
+                                <div style="font-weight: 600; font-size: 1.05rem; margin-bottom: 0.8rem; color: var(--text-primary);">
+                                    {{ email.subject or '(No Subject)' }}
+                                </div>
+                                <div style="white-space: pre-wrap; font-size: 0.95rem; line-height: 1.6; color: #cbd5e1;">{{ email.body }}</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state">
+                <h3>Inbox is empty</h3>
+                <p>No incoming emails found in SQLite. Click the button below to retrieve messages from the POP3 service.</p>
+                <div style="margin-top: 1.5rem;">
+                    <form method="POST" action="{{ url_for('fetch_mail_route') }}" style="display: inline-block;">
+                        <button type="submit" class="btn-send" style="cursor: pointer;">
+                            🔄 Fetch Messages via POP3
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+</div>
+
+<script>
+    function openEmail(id) {
+        const detailRow = document.getElementById('email-detail-' + id);
+        if (!detailRow) return;
+
+        const isCurrentlyHidden = (detailRow.style.display === 'none' || detailRow.style.display === '');
+        detailRow.style.display = isCurrentlyHidden ? 'table-row' : 'none';
+
+        // If opening an unread message, mark it as read in the database
+        const row = document.getElementById('row-' + id);
+        if (isCurrentlyHidden && row && row.classList.contains('unread')) {
+            fetch('/mark-read/' + id, { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'ok') {
+                        row.classList.remove('unread');
+                        const dot = document.getElementById('dot-' + id);
+                        if (dot) dot.remove();
+                    }
+                })
+                .catch(err => console.error("Failed to mark read:", err));
+        }
+    }
+</script>
+{% endblock %}

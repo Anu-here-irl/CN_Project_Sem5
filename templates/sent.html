@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Sent Messages - Local Mail System{% endblock %}
+
+{% block content %}
+<div class="mail-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="mail-sidebar">
+        <a href="{{ url_for('compose') }}" class="btn-compose">✏️ Compose</a>
+        <div class="sidebar-nav">
+            <a href="{{ url_for('inbox') }}">📥 Inbox</a>
+            <a href="{{ url_for('sent') }}" class="active">📤 Sent</a>
+        </div>
+    </aside>
+
+    <!-- Sent Messages List -->
+    <section class="mail-content">
+        <div class="mail-header">
+            <h2>Sent Messages</h2>
+            <span class="user-tag">{{ emails|length }} message{{ 's' if emails|length != 1 else '' }}</span>
+        </div>
+
+        {% if emails and emails|length > 0 %}
+            <table class="email-table">
+                <thead>
+                    <tr>
+                        <th>To</th>
+                        <th>Subject & Preview</th>
+                        <th style="text-align: right;">Sent At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email in emails %}
+                        <tr class="email-row" onclick="toggleDetails('email-detail-{{ email.id }}')">
+                            <td class="email-recipient">
+                                👤 {{ email.recipient }}
+                            </td>
+                            <td class="email-subject">
+                                <strong>{{ email.subject or '(No Subject)' }}</strong>
+                                <span class="email-preview">— {{ email.body[:65] }}{% if email.body|length > 65 %}...{% endif %}</span>
+                            </td>
+                            <td class="email-date">{{ email.timestamp }}</td>
+                        </tr>
+                        <!-- Collapsible detail row -->
+                        <tr id="email-detail-{{ email.id }}" style="display: none; background: rgba(15, 23, 42, 0.6);">
+                            <td colspan="3" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color);">
+                                <div style="margin-bottom: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
+                                    <strong>Recipient:</strong> {{ email.recipient }} | <strong>Date:</strong> {{ email.timestamp }}
+                                </div>
+                                <div style="white-space: pre-wrap; font-size: 0.95rem; line-height: 1.6; color: var(--text-primary);">{{ email.body }}</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state">
+                <h3>No sent emails yet</h3>
+                <p>Emails you compose and send will appear here.</p>
+                <div style="margin-top: 1.5rem;">
+                    <a href="{{ url_for('compose') }}" class="btn-send" style="display: inline-block; text-decoration: none;">Compose your first email</a>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+</div>
+
+<script>
+    function toggleDetails(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'table-row' : 'none';
+        }
+    }
+</script>
+{% endblock %}
